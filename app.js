@@ -1,5 +1,5 @@
 const responseDiv = document.getElementById("response-div");
-const resultDiv = document.getElementById("result-div");
+const tableBody = document.getElementById("tableBody");
 
 const getUsers = () => {
   const URL = "https://registration-assignment1.herokuapp.com/users";
@@ -12,16 +12,17 @@ const getUsers = () => {
     } else {
       responseDiv.innerHTML = "";
 
-      const usersList = users.map((user) => {
-        return `<tr><td>${user._id}</td><td>${user.name}</td><td>${user.email}</td><td>${user.address}</td><td><button class="btn btn-primary" onclick="editUser('${_id, index}')">Edit</button></td><td><button class="btn btn-danger" onclick="deleteUser('${user._id}')">Delete</button></td></tr>`;
+      const usersList = users.map((user , index) => {
+        return `<tr><td>${user._id}</td><td>${user.name}</td><td>${user.email}</td><td>${user.address}</td><td><button class="btn btn-primary" onclick="editUser('${user._id}',${index})">Edit</button></td><td><button class="btn btn-danger" onclick="deleteUser('${user._id}')">Delete</button></td></tr>`;
       });
 
-      resultDiv.innerHTML = "";
+      tableBody.innerHTML = "";
 
-      resultDiv.innerHTML = usersList.join("");
+      tableBody.innerHTML = usersList.join("");
     }
   });
 };
+getUsers()
 
 const addUser = () => {
   const name = document.getElementById("name").value;
@@ -54,10 +55,37 @@ function deleteUser(_id) {
   axios.delete(deleteUserURL).then((res) => {
     alert(`User Deleted Successfully`);
 
-    resultDiv.innerHTML = "";
+    tableBody.innerHTML = "";
 
     getUsers();
   });
+}
+
+function getAllUser() {
+
+  axios.get('https://registration-assignment1.herokuapp.com/users')
+      .then(function (response) {
+          console.log(response);
+
+          users = response.data;
+
+          document.getElementById("tableBody").innerHTML = ""
+
+          users.map((eachUser, index) => {
+              document.getElementById("tableBody").innerHTML +=
+                  `<tr id="${eachUser._id}">
+                      <th scope="row">${eachUser._id}</th>
+                      <td>${eachUser.name}</td>
+                      <td>${eachUser.email}</td>
+                      <td>${eachUser.address}</td>
+                      <td>
+                          <button type="button" onclick="editUser('${eachUser._id}', ${index})" class="btn btn-primary">Edit</button>
+                          <button type="button" onclick="deleteUser('${eachUser._id}')" class="btn btn-danger">Delete</button>
+                      </td>
+                  </tr>`
+          })
+      })
+
 }
 
 function editUser(_id, index) {
@@ -91,15 +119,9 @@ function updateUser(_id) {
 
           getAllUser();
 
-          document.getElementById("alert").innerHTML =
-              `<div class="alert alert-success" role="alert">
-                  User Updated Success!
-              </div>`
-
-          setTimeout(() => {
-              document.getElementById("alert").innerHTML = ""
-          }, 3000);
-
+          
+        
+         
       })
 }
 
