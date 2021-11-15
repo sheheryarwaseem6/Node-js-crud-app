@@ -117,7 +117,7 @@ function updateUser(_id) {
       .then(function (response) {
           console.log(response);
 
-          // getAllUser();
+           getAllUser();
 
           
         
@@ -128,3 +128,4 @@ function updateUser(_id) {
 
 
 getAllUser();
+  
