@@ -60,7 +60,22 @@ function deleteUser(_id) {
   });
 }
 
-// function editUser(_id) {
+function editUser(_id, index) {
+  console.log(_id, index);
 
-  
-// }
+  const userObject = users[index]
+
+  console.log("userObject: ", userObject);
+
+  document.getElementById(_id).innerHTML = `
+  <tr id="${_id}"> 
+      
+          <th scope="row">${_id}</th>
+          <td><input type="text" id="${_id}-name" value="${userObject.name}" /></td>
+          <td><input type="text" id="${_id}-email" value="${userObject.email}" /></td>
+          <td><input type="text" id="${_id}-address" value="${userObject.address}" /></td>
+          <td>
+              <button type="button" onclick="updateUser('${_id}')" class="btn btn-success">Update</button>
+          </td>
+      </tr>`;
+}
